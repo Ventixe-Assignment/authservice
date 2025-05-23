@@ -3,7 +3,7 @@ using Presentation.Interfaces;
 using Presentation.Models;
 
 namespace Presentation.Controllers;
-
+ 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthenticationsController(IAuthService authService) : ControllerBase

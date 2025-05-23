@@ -54,6 +54,7 @@ builder.Services.AddAuthentication(x =>
 
 
 var app = builder.Build();
+
 app.MapOpenApi();
 app.UseHttpsRedirection();
 app.UseCors(x => { x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();});
