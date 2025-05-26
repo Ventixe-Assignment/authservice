@@ -6,4 +6,5 @@ namespace Presentation.Data.Contexts;
 
 public class AuthDataContext(DbContextOptions<AuthDataContext> options) : IdentityDbContext<IdentityUser>(options)
 {
+
 }
