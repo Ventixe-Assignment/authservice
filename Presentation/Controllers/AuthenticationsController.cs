@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Presentation.Interfaces;
 using Presentation.Models;
+using System.Security.Claims;
 
 namespace Presentation.Controllers;
  
@@ -9,6 +11,18 @@ namespace Presentation.Controllers;
 public class AuthenticationsController(IAuthService authService) : ControllerBase
 {
     private readonly IAuthService _authService = authService;
+
+    [Authorize]
+    [HttpGet("user")]
+    public async Task<IActionResult> FetchUser()
+    {
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (string.IsNullOrWhiteSpace(email))
+            return Unauthorized();
+
+        var user = await _authService.GetUserAsync(email);
+        return user == null ? NotFound() : Ok(user);
+    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] AuthLoginRequest request)

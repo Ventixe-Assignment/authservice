@@ -17,6 +17,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
         {
             new (ClaimTypes.NameIdentifier, user.Id),
             new (ClaimTypes.Email, user.Email!),
+            new (ClaimTypes.Name, user.Email!)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));

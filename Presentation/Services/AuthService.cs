@@ -28,6 +28,16 @@ public class AuthService(SignInManager<IdentityUser> signInManager, UserManager<
 
     }
 
+    public async Task<IdentityUser?> GetUserAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null)
+            return null;
+
+        return user;
+    }
+
     public async Task<AuthResult> RegisterUserAsync(AuthRegisterRequest request)
     {
         var user = new IdentityUser { UserName = request.Email, Email = request.Email };
