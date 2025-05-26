@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Presentation.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class AuthTablesAddedToAzure : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

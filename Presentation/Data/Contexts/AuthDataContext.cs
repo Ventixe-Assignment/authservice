@@ -4,6 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Presentation.Data.Contexts;
 
-public class DataContext(DbContextOptions<DataContext> options) : IdentityDbContext<IdentityUser>(options)
+public class AuthDataContext(DbContextOptions<AuthDataContext> options) : IdentityDbContext<IdentityUser>(options)
 {
 }

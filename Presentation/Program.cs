@@ -17,7 +17,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 /* Database and Identity */
-builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AuthDB")));
+builder.Services.AddDbContext<AuthDataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AuthDB")));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
 {
     x.Password.RequiredLength = 6;
@@ -25,7 +25,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
     x.User.RequireUniqueEmail = true;
     x.SignIn.RequireConfirmedAccount = false;
 })
-.AddEntityFrameworkStores<DataContext>()
+.AddEntityFrameworkStores<AuthDataContext>()
 .AddDefaultTokenProviders();
 
 /* JWT - Token */
