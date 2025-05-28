@@ -3,7 +3,6 @@ using Presentation.Interfaces;
 using Presentation.Models;
 
 namespace Presentation.Services;
-
 public class AuthService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ITokenService tokenService) : IAuthService
 {
     private readonly SignInManager<IdentityUser> _signInManager = signInManager;

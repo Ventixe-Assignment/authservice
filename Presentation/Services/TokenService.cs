@@ -7,6 +7,11 @@ using System.Text;
 
 namespace Presentation.Services;
 
+/* Got help to setup this token provider and Jwt setup.
+ * It generates a key that i specify in my config/appsettings in cloud,
+   and then secures the key from praying eyes by encrypting it.   
+*/
+
 public class TokenService(IConfiguration configuration) : ITokenService
 {
     private readonly IConfiguration _configuration = configuration;
