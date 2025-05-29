@@ -39,7 +39,11 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
     public async Task<IActionResult> Register(AuthRegisterRequest request)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage);
+            return BadRequest(new { error = "Invalid model", details = errors });
+        }
 
         if (request.Password != request.ConfirmPassword)
             return BadRequest("Password and Confirm Password do not match.");
