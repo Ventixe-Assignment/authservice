@@ -37,11 +37,13 @@ public class AuthService(SignInManager<IdentityUser> signInManager, UserManager<
         return user;
     }
 
-    public async Task<bool> RegisterUserAsync(AuthRegisterRequest request)
+    public async Task<AuthResult> RegisterUserAsync(AuthRegisterRequest request)
     {
         var user = new IdentityUser { UserName = request.Email, Email = request.Email };
         var result = await _userManager.CreateAsync(user, request.Password);
-        return result.Succeeded;
+        return result.Succeeded
+            ? new AuthResult { Success = true }
+            : new AuthResult { Success = false, Error = "Error during registration" };
     }
 
     public async Task<AuthResult> LogoutUserAsync()
