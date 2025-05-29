@@ -35,6 +35,7 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
         return result.Success ? Ok(result) : BadRequest(result.Error);
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] AuthRegisterRequest request)
     {
