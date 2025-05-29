@@ -28,17 +28,7 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
     public async Task<IActionResult> Login([FromBody] AuthLoginRequest request)
     {
         if(!ModelState.IsValid)
-        {
-            var errors = ModelState
-            .Where(x => x.Value!.Errors.Count > 0)
-            .Select(x => new
-            {
-                Field = x.Key,
-                Errors = x.Value!.Errors.Select(e => e.ErrorMessage)
-            });
-
-            return BadRequest(new { message = "Validation failed", errors });
-        }
+            return BadRequest(ModelState);
 
         var result = await _authService.LoginUserAsync(request);
 
@@ -50,7 +40,17 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
     public async Task<IActionResult> Register([FromBody] AuthRegisterRequest request)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        {
+            var errors = ModelState
+                .Where(x => x.Value!.Errors.Count > 0)
+                .Select(x => new
+                {
+                    Field = x.Key,
+                    Errors = x.Value!.Errors.Select(e => e.ErrorMessage)
+            });
+
+            return BadRequest(new { message = "Validation failed", errors });
+        }
 
         if (request.Password != request.ConfirmPassword)
             return BadRequest("Password and Confirm Password do not match.");
