@@ -36,7 +36,7 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] AuthRegisterRequest request)
+    public async Task<IActionResult> Register(AuthRegisterRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
