@@ -28,7 +28,17 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
     public async Task<IActionResult> Login([FromBody] AuthLoginRequest request)
     {
         if(!ModelState.IsValid)
-            return BadRequest(ModelState);
+        {
+            var errors = ModelState
+            .Where(x => x.Value!.Errors.Count > 0)
+            .Select(x => new
+            {
+                Field = x.Key,
+                Errors = x.Value!.Errors.Select(e => e.ErrorMessage)
+            });
+
+            return BadRequest(new { message = "Validation failed", errors });
+        }
 
         var result = await _authService.LoginUserAsync(request);
 
