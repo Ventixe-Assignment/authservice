@@ -41,9 +41,17 @@ public class AuthService(SignInManager<IdentityUser> signInManager, UserManager<
     {
         var user = new IdentityUser { UserName = request.Email, Email = request.Email };
         var result = await _userManager.CreateAsync(user, request.Password);
-        return result.Succeeded
-            ? new AuthResult { Success = true }
-            : new AuthResult { Success = false, Error = "Error during registration" };
+
+        if (result.Succeeded)
+            return new AuthResult { Success = true };
+
+        // Extract errors from IdentityResult
+        var errorMessages = result.Errors.Select(e => e.Description).ToArray();
+        return new AuthResult
+        {
+            Success = false,
+            Error = string.Join(" | ", errorMessages) // Concatenate or return as list
+        };
     }
 
     public async Task<AuthResult> LogoutUserAsync()
