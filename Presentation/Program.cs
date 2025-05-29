@@ -20,6 +20,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddDbContext<AuthDataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
 {
+    /* By default requires 1 Uppercase! */
     x.Password.RequiredLength = 6;
     x.Password.RequireNonAlphanumeric = false;
     x.User.RequireUniqueEmail = true;
