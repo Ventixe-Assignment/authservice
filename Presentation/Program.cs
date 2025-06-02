@@ -10,7 +10,7 @@ using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultEndpoint = new Uri(builder.Configuration.GetValue<string>("VaultUri")!);
+var keyVaultEndpoint = new Uri(builder.Configuration["VaultUri"]!);
 builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -21,7 +21,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 /* Database and Identity */
-builder.Services.AddDbContext<AuthDataContext>(x => x.UseSqlServer(builder.Configuration.GetValue<string>("SqlConnection")));
+builder.Services.AddDbContext<AuthDataContext>(x => x.UseSqlServer(builder.Configuration["SqlConnection"]));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
 {
     /* By default requires 1 Uppercase! */
@@ -34,8 +34,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
 .AddDefaultTokenProviders();
 
 /* JWT - Token */
-var key = builder.Configuration.GetValue<string>("Jwt-Key");
-var issuer = builder.Configuration.GetValue<string>("Jwt-Issuer");
+var key = builder.Configuration["Jwt:Key"];
+var issuer = builder.Configuration["Jwt:Issuer"];
 
 builder.Services.AddAuthentication(x =>
 {
