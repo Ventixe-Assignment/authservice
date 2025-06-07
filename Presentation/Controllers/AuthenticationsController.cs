@@ -21,7 +21,9 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
             return Unauthorized();
 
         var user = await _authService.GetUserAsync(email);
-        return user == null ? NotFound() : Ok(user);
+        return user == null 
+            ? NotFound() 
+            : Ok(user);
     }
 
     [HttpPost("login")]
@@ -32,7 +34,9 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
 
         var result = await _authService.LoginUserAsync(request);
 
-        return result.Success ? Ok(result) : BadRequest(result.Error);
+        return result.Success 
+            ? Ok(result) 
+            : BadRequest(result.Error);
     }
 
     [AllowAnonymous]
@@ -47,13 +51,17 @@ public class AuthenticationsController(IAuthService authService) : ControllerBas
 
 
         var result = await _authService.RegisterUserAsync(request);
-        return result.Success ? Ok(result) : BadRequest(result.Error);
+        return result.Success 
+            ? Ok(result) 
+            : BadRequest(result.Error);
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         var result = await _authService.LogoutUserAsync();
-        return result.Success ? Ok(result) : BadRequest(result.Error);
+        return result.Success 
+            ? Ok(result) 
+            : BadRequest(result.Error);
     }
 }
