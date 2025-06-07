@@ -12,38 +12,62 @@ public class AuthService(SignInManager<IdentityUser> signInManager, UserManager<
 
     public async Task<AuthResult> LoginUserAsync(AuthLoginRequest request)
     {
-        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, request.RememberMe, false);
+        try
+        {
+            var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, request.RememberMe, false);
 
-        if (!result.Succeeded)
-            return new AuthResult { Success = false, Error = "Invalid login attempt." };
+            if (!result.Succeeded)
+                return new AuthResult { Success = false, Error = "Invalid login attempt." };
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return new AuthResult { Success = false, Error = "User not found." };
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return new AuthResult { Success = false, Error = "User not found." };
 
-        var token = _tokenService.GenerateToken(user);
+            var token = _tokenService.GenerateToken(user);
 
-        return new AuthResult { Success = true, Token = token };
+            return new AuthResult { Success = true, Token = token };
+        }
+        catch (Exception ex)
+        {
+            return new AuthResult { Success = false, Error = $"An error occurred during login: {ex.Message}" };
+        }
 
     }
 
     public async Task<IdentityUser?> GetUserAsync(string email)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(email);
 
-        if (user == null)
+            if (user == null)
+                return null;
+
+            return user;
+
+        }
+        catch (Exception ex)
+        {
+            
             return null;
-
-        return user;
+        }
     }
 
     public async Task<AuthResult> RegisterUserAsync(AuthRegisterRequest request)
     {
-        var user = new IdentityUser { UserName = request.Email, Email = request.Email };
-        var result = await _userManager.CreateAsync(user, request.Password);
-        return result.Succeeded
-            ? new AuthResult { Success = true }
-            : new AuthResult { Success = false, Error = "Error during registration, one uppercase and atleast 6 letters" };
+        try
+        {
+            var user = new IdentityUser { UserName = request.Email, Email = request.Email };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            return result.Succeeded
+                ? new AuthResult { Success = true }
+                : new AuthResult { Success = false, Error = "Error during registration, one uppercase and atleast 6 letters" };
+
+        }
+        catch (Exception ex)
+        {
+            return new AuthResult { Success = false, Error = $"An error occurred during registration: {ex.Message}" };
+        }
     }
 
     public async Task<AuthResult> LogoutUserAsync()
